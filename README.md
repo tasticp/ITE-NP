@@ -1,8 +1,10 @@
 
-Sembawang-ITE-NP
+Sembawang Sec - ITE - NP -
 
 ite and np shit ig idk fam, y u reading this?
 <ricksue999@gmail.com>
+to see the contents go to README.md go to code tab
+  Preview Code Blame
 
 <head>
  <!----------------------------------------------------My Studies In Mechatronics-------------------------------------------------------->
