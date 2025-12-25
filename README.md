@@ -110,9 +110,68 @@ ite and np shit ig idk fam, y u reading this?
       physics calculation
         (simple stress & strain, Torsion, Shear Force & Bending moment, Stresses in Beams, Combined Stresses, Experimental Stress analysis)
   -------------------------------------------------------------(SOM)------------------------------------------------------------>
-  <!-----------------------------------------------------------(SOM)-------------------------------------------------------------
+  <!-----------------------------------------------------------(MDSY)-------------------------------------------------------------
+    Mechatronic Drive Systems (50MDSY)
+      Motor Sizing
+      Moments of Inertia
+      DC Motor
+      AC Motor
+      Stepper Motor
+  -------------------------------------------------------------(MDSY)------------------------------------------------------------>
+  <!-----------------------------------------------------------(ROSY)-------------------------------------------------------------
+    Robot Operating System (50ROSY)
+      Navigation in Terminal (Ubuntu)
+      Nodes
+        Publisher & Subscriber
+      Services
+        Servers & Clients
+  -------------------------------------------------------------(ROSY)------------------------------------------------------------>
+  <!-----------------------------------------------------------(CASD)-------------------------------------------------------------
+    Computer Aided System Design (50CASD)
+      Design Process Fundementals
+        DOM & Ideation Process
+      Electric Motors
+        How to Calculate & Determine which motor to chose
+      Gears, Belts & Chains
+        How to Calculate & Determine which Gear/Belt to chose
+      Shafts
+        TBD
+      Bearings
+        TBD
+      Fasteners
+        TBD
+      Springs
+        TBD
+      3D Printing
+        TBD
+  -------------------------------------------------------------(CASD)------------------------------------------------------------>
+  <!-----------------------------------------------------------(NETF)-------------------------------------------------------------
+    Network Fundementals (44NETF)
+      Configurations
+        Switch & Devices
+      Protocals
+        IP Addresses
+      Number Systems
+        Binary & Hexadecimal
+      Configurations
+        Routers
+      IPV4 Address
+        Subnetting
+      IPV6
+      Network Security
+        Configure For SSH Access
+  -------------------------------------------------------------(NETF)------------------------------------------------------------>
+  <!-----------------------------------------------------------(AM)-------------------------------------------------------------
+    Applied Mechanics (41AM)
+      Trusses
+        e.g. bridges beams
+      Kinematics of Rotational motion
+      Kinetics of Rotational motion
+  -------------------------------------------------------------(AM)------------------------------------------------------------>
+  <!-----------------------------------------------------------(???)-------------------------------------------------------------
     new mod ()
-  -------------------------------------------------------------(SOM)------------------------------------------------------------>
+  -------------------------------------------------------------(???)------------------------------------------------------------>
+  
   <!-------------------------------------------------------------(Ngee Ann Polytechnic (NP (Yr 2)))------------------------------------------------------------>
 </details>
 
