@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Knife Detection AI</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        />
+        <style>
+            :root {
+                --primary-color: #6366f1;
+                --primary-dark: #4f46e5;
+                --secondary-color: #f8fafc;
+                --accent-color: #10b981;
+                --warning-color: #f59e0b;
+                --danger-color: #ef4444;
+                --text-primary: #1e293b;
+                --text-secondary: #64748b;
+                --border-color: #e2e8f0;
+                --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+                --shadow-md:
+                    0 4px 6px -1px rgb(0 0 0 / 0.1),
+                    0 2px 4px -2px rgb(0 0 0 / 0.1);
+                --shadow-lg:
+                    0 10px 15px -3px rgb(0 0 0 / 0.1),
+                    0 4px 6px -4px rgb(0 0 0 / 0.1);
+                --radius-sm: 0.375rem;
+                --radius-md: 0.5rem;
+                --radius-lg: 0.75rem;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family:
+                    "Inter",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                color: var(--text-primary);
+                line-height: 1.6;
+            }
+
+            .main-container {
+                position: relative;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-lg);
+                margin: 2rem auto;
+                max-width: 1400px;
+                overflow: hidden;
+            }
+
+            .header {
+                background: linear-gradient(
+                    135deg,
+                    var(--primary-color) 0%,
+                    var(--primary-dark) 100%
+                );
+                color: white;
+                padding: 2rem;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .header::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+                opacity: 0.3;
+            }
+
+            .header-content {
+                position: relative;
+                z-index: 10;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .header h1 {
+                font-weight: 700;
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .header p {
+                font-weight: 300;
+                font-size: 1.1rem;
+                opacity: 0.9;
+                margin-bottom: 0;
+            }
+
+            .theme-toggle {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: rgba(99, 102, 241, 0.9);
+                border: 1px solid rgba(99, 102, 241, 1);
+                color: white;
+                border-radius: var(--radius-md);
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+                z-index: 100;
+                box-shadow: var(--shadow-md);
+            }
+
+            .theme-toggle:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: translateY(-1px);
+            }
+
+            .content-area {
+                padding: 2rem;
+            }
+
+            .instructions-card {
+                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                border: 1px solid var(--border-color);
+                border-radius: var(--radius-lg);
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                box-shadow: var(--shadow-sm);
+            }
+
+            .instructions-card h3 {
+                color: var(--primary-color);
+                font-weight: 600;
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .instructions-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .instructions-list li {
+                padding: 0.5rem 0;
+                display: flex;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .instructions-list li::before {
+                content: "✓";
+                color: var(--accent-color);
+                font-weight: bold;
+                font-size: 1.1rem;
+                margin-top: 0.1rem;
+            }
+
+            .nav-tabs {
+                border: none;
+                background: var(--secondary-color);
+                border-radius: var(--radius-lg);
+                padding: 0.5rem;
+                margin-bottom: 2rem;
+                box-shadow: var(--shadow-sm);
+            }
+
+            .nav-tabs .nav-link {
+                border: none;
+                border-radius: var(--radius-md);
+                color: var(--text-secondary);
+                font-weight: 500;
+                padding: 0.75rem 1.5rem;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .nav-tabs .nav-link::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.4),
+                    transparent
+                );
+                transition: left 0.5s;
+            }
+
+            .nav-tabs .nav-link:hover::before {
+                left: 100%;
+            }
+
+            .nav-tabs .nav-link.active {
+                background: var(--primary-color);
+                color: white;
+                box-shadow: var(--shadow-md);
+                transform: translateY(-1px);
+            }
+
+            .drop-zone {
+                border: 2px dashed var(--border-color);
+                border-radius: var(--radius-lg);
+                padding: 3rem 2rem;
+                text-align: center;
+                background: var(--secondary-color);
+                transition: all 0.3s ease;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .drop-zone::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(
+                    45deg,
+                    transparent 30%,
+                    rgba(99, 102, 241, 0.1) 50%,
+                    transparent 70%
+                );
+                transform: translateX(-100%);
+                transition: transform 0.6s ease;
+            }
+
+            .drop-zone:hover::before {
+                transform: translateX(100%);
+            }
+
+            .drop-zone.dragover {
+                border-color: var(--primary-color);
+                background: rgba(99, 102, 241, 0.05);
+                transform: scale(1.02);
+            }
+
+            .drop-zone-icon {
+                font-size: 3rem;
+                color: var(--text-secondary);
+                margin-bottom: 1rem;
+                transition: all 0.3s ease;
+            }
+
+            .drop-zone:hover .drop-zone-icon {
+                color: var(--primary-color);
+                transform: scale(1.1);
+            }
+
+            .drop-zone-text {
+                font-size: 1.1rem;
+                font-weight: 500;
+                color: var(--text-primary);
+                margin-bottom: 0.5rem;
+            }
+
+            .drop-zone-subtext {
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+            }
+
+            .image-container {
+                background: white;
+                border-radius: var(--radius-lg);
+                padding: 1.5rem;
+                box-shadow: var(--shadow-md);
+                transition: all 0.3s ease;
+                border: 1px solid var(--border-color);
+            }
+
+            .image-container:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .image-title {
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .image-display {
+                width: 100%;
+                height: 300px;
+                object-fit: contain;
+                border-radius: var(--radius-md);
+                background: var(--secondary-color);
+                border: 1px solid var(--border-color);
+                transition: all 0.3s ease;
+            }
+
+            .image-display:hover {
+                transform: scale(1.02);
+            }
+
+            .btn-modern {
+                border-radius: var(--radius-md);
+                font-weight: 500;
+                padding: 0.75rem 1.5rem;
+                transition: all 0.3s ease;
+                border: none;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn-modern::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent
+                );
+                transition: left 0.5s;
+            }
+
+            .btn-modern:hover::before {
+                left: 100%;
+            }
+
+            .btn-primary-modern {
+                background: linear-gradient(
+                    135deg,
+                    var(--primary-color) 0%,
+                    var(--primary-dark) 100%
+                );
+                color: white;
+                box-shadow: var(--shadow-md);
+            }
+
+            .btn-primary-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .btn-success-modern {
+                background: linear-gradient(
+                    135deg,
+                    var(--accent-color) 0%,
+                    #059669 100%
+                );
+                color: white;
+                box-shadow: var(--shadow-md);
+            }
+
+            .btn-success-modern:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .progress-modern {
+                height: 0.75rem;
+                border-radius: var(--radius-md);
+                background: var(--secondary-color);
+                overflow: hidden;
+                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .progress-bar-modern {
+                background: linear-gradient(
+                    90deg,
+                    var(--primary-color) 0%,
+                    var(--accent-color) 100%
+                );
+                border-radius: var(--radius-md);
+                transition: width 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .progress-bar-modern::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.3),
+                    transparent
+                );
+                animation: shimmer 2s infinite;
+            }
+
+            @keyframes shimmer {
+                0% {
+                    left: -100%;
+                }
+                100% {
+                    left: 100%;
+                }
+            }
+
+            .loading-spinner {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border: 3px solid rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                border-top-color: #fff;
+                animation: spin 1s ease-in-out infinite;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .fade-in {
+                animation: fadeIn 0.5s ease-in;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .slide-in {
+                animation: slideIn 0.3s ease-out;
+            }
+
+            @keyframes slideIn {
+                from {
+                    transform: translateX(-100%);
+                }
+                to {
+                    transform: translateX(0);
+                }
+            }
+
+            /* Dark mode styles */
+            body.dark-mode {
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            }
+
+            body.dark-mode .main-container {
+                background: rgba(15, 23, 42, 0.95);
+                color: #f1f5f9;
+            }
+
+            body.dark-mode .header {
+                background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+            }
+
+            body.dark-mode .theme-toggle {
+                background: rgba(30, 64, 175, 0.9);
+                border-color: rgba(30, 64, 175, 1);
+            }
+
+            body.dark-mode .instructions-card {
+                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                border-color: #475569;
+            }
+
+            body.dark-mode .nav-tabs {
+                background: #1e293b;
+            }
+
+            body.dark-mode .drop-zone {
+                background: #1e293b;
+                border-color: #475569;
+            }
+
+            body.dark-mode .image-container {
+                background: #1e293b;
+                border-color: #475569;
+            }
+
+            body.dark-mode .image-display {
+                background: #334155;
+                border-color: #475569;
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .header h1 {
+                    font-size: 2rem;
+                }
+
+                .content-area {
+                    padding: 1rem;
+                }
+
+                .drop-zone {
+                    padding: 2rem 1rem;
+                }
+
+                .image-display {
+                    height: 200px;
+                }
+            }
+
+            /* Custom scrollbar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--secondary-color);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--primary-color);
+                border-radius: var(--radius-sm);
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: var(--primary-dark);
+            }
+
+            /* Enhanced focus states for accessibility */
+            .btn-modern:focus,
+            .nav-link:focus,
+            .drop-zone:focus {
+                outline: 2px solid var(--primary-color);
+                outline-offset: 2px;
+            }
+
+            /* Smooth transitions for all interactive elements */
+            * {
+                transition: all 0.2s ease;
+            }
+
+            /* Enhanced hover effects */
+            .image-container:hover .image-title {
+                color: var(--primary-color);
+            }
+
+            .drop-zone:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--shadow-lg);
+            }
+
+            /* Loading animation for processing state */
+            .processing {
+                position: relative;
+                overflow: hidden;
+            }
+
+            .processing::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(99, 102, 241, 0.1),
+                    transparent
+                );
+                animation: processing 1.5s infinite;
+            }
+
+            @keyframes processing {
+                0% {
+                    left: -100%;
+                }
+                100% {
+                    left: 100%;
+                }
+            }
+
+            /* Enhanced notification animations */
+            .notification {
+                animation: slideInRight 0.3s ease-out;
+            }
+
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+
+            /* Improved button states */
+            .btn-modern:active {
+                transform: translateY(1px);
+            }
+
+            /* Enhanced image loading states */
+            .image-display.loading {
+                opacity: 0.7;
+                filter: blur(1px);
+            }
+
+            /* Success state animations */
+            .success-pulse {
+                animation: successPulse 0.6s ease-out;
+            }
+
+            @keyframes successPulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.05);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main-container">
+            <button id="toggleMode" class="theme-toggle">
+                <i class="fas fa-moon"></i> Dark Mode
+            </button>
+            <div class="header">
+                <div class="header-content">
+                    <h1>
+                        <i class="fas fa-shield-alt"></i> Knife Detection AI
+                    </h1>
+                    <p>
+                        Advanced computer vision for real-time weapon detection
+                    </p>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="instructions-card fade-in">
+                    <h3><i class="fas fa-info-circle"></i> How to Use</h3>
+                    <ul class="instructions-list">
+                        <li>
+                            <strong>Single Detection:</strong> Upload one image
+                            for instant analysis
+                        </li>
+                        <li>
+                            <strong>Batch Detection:</strong> Process multiple
+                            images from a folder
+                        </li>
+                        <li>
+                            <strong>Drag & Drop:</strong> Simply drag files or
+                            folders onto the upload area
+                        </li>
+                        <li>
+                            <strong>Real-time Results:</strong> View original
+                            and detected images side by side
+                        </li>
+                        <li>
+                            <strong>Download:</strong> Save processed images
+                            with bounding boxes
+                        </li>
+                    </ul>
+                </div>
+
+                <ul class="nav nav-tabs" id="detectTab" role="tablist">
+                    <li class="nav-item">
+                        <a
+                            class="nav-link active"
+                            id="single-tab"
+                            data-toggle="tab"
+                            href="#single"
+                            role="tab"
+                        >
+                            <i class="fas fa-image"></i> Single Detection
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            id="batch-tab"
+                            data-toggle="tab"
+                            href="#batch"
+                            role="tab"
+                        >
+                            <i class="fas fa-folder-open"></i> Batch Detection
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="detectTabContent">
+                    <!-- Single Detection Tab -->
+                    <div
+                        class="tab-pane fade show active"
+                        id="single"
+                        role="tabpanel"
+                    >
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div id="drop-area-single" class="drop-zone">
+                                    <div class="drop-zone-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="drop-zone-text">
+                                        Drop your image here
+                                    </div>
+                                    <div class="drop-zone-subtext">
+                                        or click to browse files
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="image-container">
+                                    <h5 class="image-title">
+                                        <i class="fas fa-image"></i> Original
+                                        Image
+                                    </h5>
+                                    <img
+                                        id="left"
+                                        class="image-display"
+                                        src="../static/empty.svg"
+                                        alt="Original Image"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="image-container">
+                                    <h5 class="image-title">
+                                        <i class="fas fa-search"></i> Detected
+                                        Image
+                                    </h5>
+                                    <img
+                                        id="center"
+                                        class="image-display"
+                                        src="../static/empty.svg"
+                                        alt="Detected Image"
+                                    />
+                                    <a
+                                        id="download-single"
+                                        href="#"
+                                        class="btn btn-success-modern btn-modern w-100 mt-3"
+                                        style="display: none"
+                                        download="detected.png"
+                                    >
+                                        <i class="fas fa-download"></i> Download
+                                        Result
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Batch Detection Tab -->
+                    <div class="tab-pane fade" id="batch" role="tabpanel">
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div id="drop-area-batch" class="drop-zone">
+                                    <div class="drop-zone-icon">
+                                        <i class="fas fa-folder-plus"></i>
+                                    </div>
+                                    <div class="drop-zone-text">
+                                        Drop a folder of images here
+                                    </div>
+                                    <div class="drop-zone-subtext">
+                                        or click to select a folder
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div
+                                    class="progress-modern"
+                                    style="display: none"
+                                    id="batch-progress-bar-container"
+                                >
+                                    <div
+                                        id="batch-progress-bar"
+                                        class="progress-bar-modern"
+                                        role="progressbar"
+                                        style="width: 0%"
+                                    >
+                                        <span
+                                            class="progress-text"
+                                            style="
+                                                position: absolute;
+                                                width: 100%;
+                                                text-align: center;
+                                                color: white;
+                                                font-weight: 500;
+                                                font-size: 0.875rem;
+                                            "
+                                            >0%</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="image-container">
+                                    <h5 class="image-title">
+                                        <i class="fas fa-image"></i> Original
+                                        Image
+                                    </h5>
+                                    <img
+                                        id="left-batch"
+                                        class="image-display"
+                                        src="../static/empty.svg"
+                                        alt="Original Image"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="image-container">
+                                    <h5 class="image-title">
+                                        <i class="fas fa-search"></i> Detected
+                                        Image
+                                    </h5>
+                                    <img
+                                        id="center-batch"
+                                        class="image-display"
+                                        src="../static/empty.svg"
+                                        alt="Detected Image"
+                                    />
+                                    <div class="row mt-3">
+                                        <div class="col-6">
+                                            <a
+                                                id="download-batch"
+                                                href="#"
+                                                class="btn btn-success-modern btn-modern w-100"
+                                                style="display: none"
+                                                download="detected_batch.png"
+                                            >
+                                                <i class="fas fa-download"></i>
+                                                Download
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a
+                                                id="download-batch-zip"
+                                                href="#"
+                                                class="btn btn-primary-modern btn-modern w-100"
+                                                style="display: none"
+                                                download="detected_batch.zip"
+                                            >
+                                                <i
+                                                    class="fas fa-file-archive"
+                                                ></i>
+                                                Download All
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="../static/script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script>
+            // Enhanced theme toggle with smooth transitions
+            $(function () {
+                $("#toggleMode").on("click", function () {
+                    $("body").toggleClass("dark-mode");
+                    const icon = $(this).find("i");
+                    const text = $(this).text();
+
+                    if ($("body").hasClass("dark-mode")) {
+                        icon.removeClass("fa-moon").addClass("fa-sun");
+                        $(this).html('<i class="fas fa-sun"></i> Light Mode');
+                    } else {
+                        icon.removeClass("fa-sun").addClass("fa-moon");
+                        $(this).html('<i class="fas fa-moon"></i> Dark Mode');
+                    }
+
+                    // Add smooth transition effect
+                    $(".main-container").addClass("fade-in");
+                    setTimeout(
+                        () => $(".main-container").removeClass("fade-in"),
+                        500,
+                    );
+                });
+
+                // Enhanced tab switching with animations
+                $('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
+                    const target = $(e.target).attr("href");
+                    $(target).addClass("slide-in");
+                    setTimeout(() => $(target).removeClass("slide-in"), 300);
+                });
+
+                // Enhanced drag and drop visual feedback
+                $(".drop-zone")
+                    .on("dragover", function (e) {
+                        e.preventDefault();
+                        $(this).addClass("dragover");
+                    })
+                    .on("dragleave drop", function (e) {
+                        e.preventDefault();
+                        $(this).removeClass("dragover");
+                    });
+            });
+        </script>
+    </body>
+</html>
