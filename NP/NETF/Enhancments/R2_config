@@ -1,0 +1,55 @@
+R2>enable
+R2# configure terminal
+R2(config)# interface serial 0/0/1
+R2(config-if)# ip address 105.4.100.161 255.255.255.224
+R2(config-if)# no shutdown
+R2(config-if)# description Cloud Router to Router of Branch WAN
+R2(config-if)#exit
+R2(config)# ip route 105.4.100.160 255.255.255.224 105.4.100.162
+R2(config)# ip route 105.4.100.192 255.255.255.224 105.4.100.162
+R2(config)# ip route 105.4.100.224 255.255.255.224 105.4.100.162
+R2# exit
+R2# copy running-config startup-config
+###########################################################################
+R2>enable
+R2# configure terminal
+R2(config)# security passwords min-length 10
+R2(config)# line console 0
+R2(config-line)# password password123
+R2(config-line)# login
+R2(config-line)#exec-timeout 5
+R2(config-line)#logging synchronous
+R2(config-line)# exit
+R2(config)#enable secret password@123
+R2(config)#service password-encryption
+R2(config)#exit
+R2# exit
+R2# copy running-config startup-config
+###########################################################################
+R2>enable
+R2# configure terminal
+R2(config)#line vty 0 4
+R2(config-line)# password password123
+R2(config-line)# login
+R2(config-line)#exec-timeout 10
+R2(config-line)#transport input ssh
+R2(config-line)#login local
+R2(config-line)#logging synchronous
+R2(config-line)#exit
+R2(config)#username HQ secret HQpassword123
+R2(config)#username Branch secret Branchpassword123
+R2(config)#ip domain-name BRANCH.com
+R2(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+R2(config)#login block-for 60 attempts 10 within 60
+R2(config)#login block-for 60 attempts 10 within 60
+*Jan 14 12:2:17.163: %SSH-5-ENABLED: SSH 1.99 has been enabled
+R2(config)#banner motd # Unauthorized access prohibited! #
+R2# exit
+R2# copy running-config startup-config
+###########################################################################
+R2>enable
+R2# clock set 11:30:30 Jan 13 2026
+R2# copy running-config startup-config
+
+###########################################################################

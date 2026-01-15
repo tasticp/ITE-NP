@@ -1,0 +1,18 @@
+C:\>ssh /?
+Cisco Packet Tracer PC SSH
+
+Usage: SSH -l username target
+
+
+Line console:
+password123
+
+Enable:
+password@123
+
+Router	    Username	Password
+R1	        HQ	        HQpassword123
+R2	        HQ	        HQpassword123
+R2	        Branch	    Branchpassword123
+R3	        OUTSIDE	    OUTISDEpassword123
+R4	        HOME	    HOMEpassword123

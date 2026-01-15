@@ -1,0 +1,61 @@
+Router>enable
+Router# configure terminal
+Router(config)# hostname R4
+R4(config)# no ip domain-lookup
+R4(config)# interface gigabitEthernet 0/0
+R4(config-if)# ip address 105.4.100.194 255.255.255.224
+R4(config-if)# no shutdown
+R4(config-if)# description Laptop to Router to Modem to Cloud
+R4(config-if)#exit
+R4(config)#ip default-gateway 105.4.100.194
+R4(config)#ip route 105.4.100.0 255.255.255.224 105.4.100.193
+R4(config)#ip route 105.4.100.32 255.255.255.224 105.4.100.193
+R4(config)#ip route 105.4.100.64 255.255.255.224 105.4.100.193
+R4(config)#ip route 105.4.100.96 255.255.255.224 105.4.100.193
+R4(config)#ip route 105.4.100.128 255.255.255.224 105.4.100.193
+R4(config)# ip route 105.4.100.224 255.255.255.224 105.4.100.193
+R4(config)#ip route 105.4.100.192 255.255.255.224 105.4.100.193
+R4(config)#ip route 105.4.100.192 255.255.255.224 105.4.100.195
+R4(config)# ip route 105.4.100.160 255.255.255.240 105.4.100.193
+R4# exit
+R4# copy running-config startup-config
+###########################################################################
+R4>enable
+R4# configure terminal
+R4(config)# security passwords min-length 10
+R4(config)# line console 0
+R4(config-line)# password password123
+R4(config-line)# login
+R4(config-line)#exec-timeout 5
+R4(config-line)#logging synchronous
+R4(config-line)# exit
+R4(config)#enable secret password@123
+R4(config)#service password-encryption
+R4(config)#exit
+R4# exit
+R4# copy running-config startup-config
+###########################################################################
+R4>enable
+R4# configure terminal
+R4(config)#line vty 0 4
+R4(config-line)# password password123
+R4(config-line)# login
+R4(config-line)#exec-timeout 10
+R4(config-line)#transport input ssh
+R4(config-line)#login local
+R4(config-line)#logging synchronous
+R4(config-line)#exit
+R4(config)# username HOME secret HOMEpassword123
+R4(config)#ip domain-name HOME.com
+R4(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+R4(config)#login block-for 60 attempts 10 within 60
+R4(config)#login block-for 60 attempts 10 within 60
+*Jan 14 12:2:17.163: %SSH-5-ENABLED: SSH 1.99 has been enabled
+R4(config)#banner motd # Unauthorized access prohibited! #
+R4# exit
+R4# copy running-config startup-config
+###########################################################################
+R4>enable
+R4# clock set 11:30:30 Jan 13 2026
+R4# copy running-config startup-config

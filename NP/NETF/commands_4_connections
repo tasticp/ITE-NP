@@ -1,0 +1,37 @@
+ping
+
+[used on PC_A to other PCs]
+
+PC_A to PC_B	ping 105.4.100.94
+PC_A to PC_D	ping 105.4.100.30
+PC_A to PC_E	ping 105.4.100.126
+
+tracert
+
+[used on PC_A to PC_D to see the path the packets go from computer to destination]
+
+
+PC_A	tracert 105.4.100.30
+
+
+ipconfig /all
+
+[used on PC_A to show the Connections that are on PC_A]
+
+PC_A	ipconfig /all
+
+
+show interface brief
+
+[used on PC_A to show a summary of the ports, information, and statuses]
+
+R1	show interface brief
+R2	show interface brief
+
+
+show ip route
+
+[used on PC_A to show a routing table which tells you what Is connected to an active]
+
+R1	show ip route
+R2	show ip route

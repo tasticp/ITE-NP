@@ -1,0 +1,23 @@
+Router>enable
+Router# configure terminal
+Router(config)# hostname R1
+R1(config)# no ip domain-lookup
+R1(config)# interface gigabitEthernet 0/0
+R1(config-if)# ip address 105.4.100.33 255.255.255.224
+R1(config-if)# no shutdown
+R1(config-if)# description Router of company HQ to Subnet A
+R1(config-if)#exit
+R1(config)# interface gigabitEthernet 0/1
+R1(config-if)# ip address 105.4.100.65 255.255.255.224
+R1(config-if)# no shutdown
+R1(config-if)# description Router of company HQ to Subnet B
+R1(config-if)# exit
+R1(config)# interface serial 0/0/0
+R1(config-if)# ip address 105.4.100.129 255.255.255.224
+R1(config-if)# no shutdown
+R1(config-if)# description Router of company HQ to Router of Branch WAN
+R1(config-if)#exit
+R1(config)# ip route 105.4.100.0 255.255.255.224 105.4.100.130
+R1(config)# ip route 105.4.100.96 255.255.255.224 105.4.100.130
+R1(config)# ip route 105.4.100.128 255.255.255.224 105.4.100.130
+R1# copy running-config startup-config

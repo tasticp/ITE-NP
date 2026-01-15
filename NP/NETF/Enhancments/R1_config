@@ -1,0 +1,47 @@
+R1>enable
+R1# configure terminal
+R1(config)# ip route 105.4.100.160 255.255.255.224 105.4.100.130
+R1(config)# ip route 105.4.100.192 255.255.255.224 105.4.100.130
+R1(config)# ip route 105.4.100.224 255.255.255.224 105.4.100.130
+R1# exit
+R1# copy running-config startup-config
+###########################################################################
+R1>enable
+R1# configure terminal
+R1(config)# security passwords min-length 10
+R1(config)# line console 0
+R1(config-line)# password password123
+R1(config-line)# login
+R1(config-line)#exec-timeout 5
+R1(config-line)#logging synchronous
+R1(config-line)# exit
+R1(config)#enable secret password@123
+R1(config)#service password-encryption
+R1(config)#exit
+R1# exit
+R1# copy running-config startup-config
+###########################################################################
+R1>enable
+R1# configure terminal
+R1(config)#line vty 0 4
+R1(config-line)# password password123
+R1(config-line)# login
+R1(config-line)#exec-timeout 10
+R1(config-line)#transport input ssh
+R1(config-line)#login local
+R1(config-line)#logging synchronous
+R1(config-line)#exit
+R1(config)#username HQ secret HQpassword123
+R1(config)#ip domain-name HQ.com
+R1(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+R1(config)#login block-for 60 attempts 10 within 60
+R1(config)#login block-for 60 attempts 10 within 60
+*Jan 14 12:2:17.163: %SSH-5-ENABLED: SSH 1.99 has been enabled
+R1(config)#banner motd # Unauthorized access prohibited! #
+R1# exit
+R1# copy running-config startup-config
+###########################################################################
+R1>enable
+R1# clock set 11:30:30 Jan 13 2026
+R1# copy running-config startup-config

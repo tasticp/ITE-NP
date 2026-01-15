@@ -1,0 +1,63 @@
+Router>enable
+Router# configure terminal
+Router(config)# hostname R3
+R3(config)# no ip domain-lookup
+R3(config)# interface gigabitEthernet 0/0
+R3(config-if)# ip address 105.4.100.193 255.255.255.224
+R3(config-if)# no shutdown
+R3(config-if)# description Cloud Router to Router of Branch WAN
+R3(config-if)#exit
+R3(config)# ip route 105.4.100.160 255.255.255.224 105.4.100.161
+R3(config)# ip route 105.4.100.0 255.255.255.224 105.4.100.161
+R3(config)# ip route 105.4.100.32 255.255.255.224 105.4.100.161
+R3(config)# ip route 105.4.100.64 255.255.255.224 105.4.100.161
+R3(config)# ip route 105.4.100.96 255.255.255.224 105.4.100.161
+R3(config)# ip route 105.4.100.128 255.255.255.224 105.4.100.161
+R3(config)# ip route 105.4.100.224 255.255.255.224 105.4.100.161
+R3(config)# ip route 105.4.100.192 255.255.255.224 105.4.100.195
+R3(config)# ip route 105.4.100.192 255.255.255.224 105.4.100.194
+R3(config)# ip route 105.4.100.224 255.255.255.224 105.4.100.194
+R3# copy running-config startup-config
+###########################################################################
+R3>enable
+R3# configure terminal
+R3(config)# security passwords min-length 10
+R3(config)# line console 0
+R3(config-line)# password password123
+R3(config-line)# login
+R3(config-line)#exec-timeout 5
+R3(config-line)#logging synchronous
+R3(config-line)# exit
+R3(config)#enable secret password@123
+R3(config)#service password-encryption
+R3(config)#exit
+R3# exit
+R3# copy running-config startup-config
+###########################################################################
+R3>enable
+R3# configure terminal
+R3(config)#line vty 0 4
+R3(config-line)# password password123
+R3(config-line)# login
+R3(config-line)#exec-timeout 10
+R3(config-line)#transport input ssh
+R3(config-line)#login local
+R3(config-line)#logging synchronous
+R3(config-line)#exit
+R3(config)#username OUTSIDE secret OUTISDEpassword123
+R3(config)#ip domain-name OUTSIDE.com
+R3(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+R3(config)#login block-for 60 attempts 10 within 60
+R3(config)#login block-for 60 attempts 10 within 60
+*Jan 14 12:2:17.163: %SSH-5-ENABLED: SSH 1.99 has been enabled
+R3(config)#banner motd # Unauthorized access prohibited! #
+R3# exit
+R3# copy running-config startup-config
+###########################################################################
+R3>enable
+R3# clock set 11:30:30 Jan 13 2026
+R3# copy running-config startup-config
+
+###########################################################################
