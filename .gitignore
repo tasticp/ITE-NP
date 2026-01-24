@@ -1,0 +1,42 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Logs
+*.log
+
+# Office documents
+*.docx
+*.xlsx
+*.pptx
+
+# PDF files
+*.pdf
+
+# Image files (if not meant to be tracked)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+
+# Notes and drafts
+drafts/
+notes/
